@@ -82,7 +82,8 @@ plt.show()
 
 ## Output:
 ![image](https://github.com/user-attachments/assets/ba77c23c-70b1-4c8a-87b5-7a2e222958f9)
-![image](https://github.com/user-attachments/assets/dccc5017-0ef0-45a1-996e-de348a3c2b81)
+![image](https://github.com/user-attachments/assets/5f0560f6-bc46-4505-9c0b-4b4fe34d6031)
+
 ![image](https://github.com/user-attachments/assets/14509bd4-5fcb-4bfe-b0b6-ee39f5b28217)
 
 
