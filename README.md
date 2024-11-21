@@ -1,4 +1,3 @@
-# BLENDED_LEARNING
 # Implementation of Ridge, Lasso, and ElasticNet Regularization for Predicting Car Price
 
 ## AIM:
@@ -9,83 +8,68 @@ To implement Ridge, Lasso, and ElasticNet regularization models using polynomial
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
 ## Algorithm
-1. Load the dataset
-2. Preprocess the data
-3. Implement Ridge, Lasso and ElasticNet Regularization 
-4. Evaluate and visualize the result
+1. Import the necessary python libraries
+2. Load the dataset
+3. Train the model for Ridge, Lasso and ElasticNet
+4. Fit and Evaluate the model
+5. Visualize the model
 
 ## Program:
 ```
 /*
 Program to implement Ridge, Lasso, and ElasticNet regularization using pipelines.
-Developed by: POOJASREE B
-RegisterNumber:  212223040148
+Developed by: Poojasree B
+RegisterNumber: 212223040148
 */
+# Program to implement Ridge, Lasso, and ElasticNet regularization using pipelines.
+# Importing necessary libraries
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import Ridge, Lasso, ElasticNet
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import Pipeline
+from sklearn.linear_model import Ridge, Lasso, ElasticNet
 from sklearn.metrics import mean_squared_error, r2_score
 
-data = pd.read_csv('car_price_prediction_.csv')
+# Load the dataset
+file_path = 'https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-ML240EN-SkillsNetwork/labs/encoded_car_data.csv'
+df = pd.read_csv(file_path)
 
-X = data[['Year', 'Engine Size', 'Mileage', 'Condition']] 
-y = data['Price']
+# Select relevant features and target variable
+X = df.drop(columns=['price'])  # All columns except 'price'
+y = df['price']  # Target variable
 
-X = pd.get_dummies(X, drop_first=True)
-
+# Split the dataset into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+# Define the models and pipelines
 models = {
-    'Ridge Regression': Pipeline([
-        ('poly_features', PolynomialFeatures(degree=2)),
-        ('ridge_regressor', Ridge(alpha=1.0))
-    ]),
-    'Lasso Regression': Pipeline([
-        ('poly_features', PolynomialFeatures(degree=2)),
-        ('lasso_regressor', Lasso(alpha=1.0))
-    ]),
-    'ElasticNet Regression': Pipeline([
-        ('poly_features', PolynomialFeatures(degree=2)),
-        ('elasticnet_regressor', ElasticNet(alpha=1.0))
-    ])
+    "Ridge": Ridge(alpha=1.0),
+    "Lasso": Lasso(alpha=0.01),
+    "ElasticNet": ElasticNet(alpha=0.01, l1_ratio=0.5)  # l1_ratio controls L1 vs L2 mix
 }
 
-plt.figure(figsize=(15, 10))
+# Iterate over models and evaluate
+for name, model in models.items():
+    pipeline = Pipeline([
+        ("polynomial_features", PolynomialFeatures(degree=2)),
+        ("regressor", model)
+    ])
 
-for i, (model_name, model) in enumerate(models.items(), 1):
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
+    # Train the model
+    pipeline.fit(X_train, y_train)
 
-    mse = mean_squared_error(y_test, y_pred)
-    r2 = r2_score(y_test, y_pred)
-    
-    print(f'{model_name} - Mean Squared Error: {mse}')
-    print(f'{model_name} - R-squared: {r2}')
-    
+    # Make predictions
+    y_pred = pipeline.predict(X_test)
 
-    plt.subplot(2, 2, i)
-    plt.scatter(y_test, y_pred, color='blue', label='Predicted Prices')
-    plt.plot([y.min(), y.max()], [y.min(), y.max()], 'r--', lw=2) 
-    plt.xlabel('Actual Prices')
-    plt.ylabel('Predicted Prices')
-    plt.title(f'Actual vs Predicted Car Prices using {model_name}')
-    plt.legend()
+    # Evaluate the model
+    print(f"\n{name} Regression Results:")
+    print("Mean Squared Error (MSE):", mean_squared_error(y_test, y_pred))
+    print("R-squared:", r2_score(y_test, y_pred))
 
-plt.tight_layout()
-plt.show()
 ```
 
 ## Output:
-![image](https://github.com/user-attachments/assets/ba77c23c-70b1-4c8a-87b5-7a2e222958f9)
-![image](https://github.com/user-attachments/assets/5f0560f6-bc46-4505-9c0b-4b4fe34d6031)
-
-![image](https://github.com/user-attachments/assets/14509bd4-5fcb-4bfe-b0b6-ee39f5b28217)
-
+![image](https://github.com/user-attachments/assets/42d0e30c-5e7a-4b80-95ce-05332e18175a)
 
 
 ## Result:
